@@ -14,7 +14,7 @@ NAME = hotrace
 DEBUG = yes
 LD = $(CC)
 SRCDIR = ./sources
-OBJDIR = ./objetcs
+OBJDIR = ./objects
 INCDIR = -I./includes
 
 ifeq ($(DEBUG),yes)
