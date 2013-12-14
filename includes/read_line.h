@@ -6,7 +6,7 @@
 /*   By: mde-jesu <mde-jesu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/12/14 20:02:43 by mde-jesu          #+#    #+#             */
-/*   Updated: 2013/12/14 20:04:12 by mde-jesu         ###   ########.fr       */
+/*   Updated: 2013/12/14 20:04:12 by aviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,4 +15,4 @@
 
 int		read_line(char **line);
 
-#endif /*!READ_LINE_H*/
+#endif /* !READ_LINE_H */
