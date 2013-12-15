@@ -30,7 +30,8 @@ static void	ft_ht_init(t_ht *new_table, size_t size)
 	new_table->size = size;
 	while (--size)
 		new_table->table[size] = NULL;
-
+	new_table->collision = 0;
+	new_table->charge = 0;
 }
 
 /*
@@ -57,33 +58,29 @@ t_ht		*ft_ht_new(size_t size)
 }
 
 /*
-** t_ht_node	*ft_lookkey(t_ht *hash_table, char *key)
-** Look up for a key at hash_table[hash(key)]->node->key
+** t_ht_node	*ft_lookvalue(t_ht *hash_table, char *value)
+** Look up for a value at hash_table[hash(value)]->node->value
 **
-** @param	hash_table	: Hashtable where were lookup for a key.
-** @param	key			: Key associated to a value.
-** @return	*t_ht_node	: Pointer of associated value to key.
+** @param	hash_table	: Hashtable where were lookup for a value.
+** @param	value			: value associated to a value.
+** @return	*t_ht_node	: Pointer of associated value to value.
 ** Case 1 : No collision
 ** if hashtable[hash]->node == NULL
-** hashtable[hash]->node->key
+** hashtable[hash]->node->value
 **
 ** Case 2 : n Collision
 ** if hashtable[hash]->node != NULL
-** hashtable[hash]->node->n[ next-> ]key
+** hashtable[hash]->node->n[ next-> ]value
 */
 
-t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *key)
+t_ht_node	*ft_ht_lookvalue(t_ht *hash_table, char *value, const t_uint32 hash)
 {
-
-	const t_uint32	hash = ft_murmurhash2(key, ft_strlen(key),
-											(t_uint32) &hash_table)
-											% hash_table->size;
 	t_ht_node		*node;
 
 	node = hash_table->table[hash];
 	while (node != NULL)
 	{
-		if (ft_strcmp(key, node->key) == 0)
+		if (len_value == node->len_value && ft_strcmp(value, node->value) == 0)
 		{
 			return (node);
 		}
@@ -93,31 +90,41 @@ t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *key)
 }
 
 /*
-** int ft_ht_add_key(t_ht *hash_table, char *key)
+** int ft_ht_add_value(t_ht *hash_table, char *value)
 ** @param	hash_table	: Hashtable where we want to add an entry.
-** @param	key			: Key to add.
-** Add a key to the given Hashtable. Check for collision,
+** @param	value			: value to add.
+** Add a value to the given Hashtable. Check for collision,
 ** if hash collision appear add forward to the concerned node another node.
 ** Collision on node:
 ** new_node->next = hash_table->table[hash];
 ** hash_table->table[hash] = new_node;
 */
 
-int			ft_ht_add_key(t_ht *hash_table, char *key)
+int			ft_ht_add_value(t_ht *hash_table, char *value)
 {
-	const t_uint32	hash = ft_murmurhash2(key, ft_strlen(key),
-											(t_uint32) &hash_table)
-											% hash_table->size;
+	t_uint32		hash;
 	t_ht_node		*new_node;
 	t_ht_node		*current_node;
+	size_t			len_value;
 
 	if ((new_node = (t_ht_node*) malloc(sizeof(t_ht_node))) == NULL)
 		return (-1);
-	if ((current_node = ft_ht_lookkey(hash_table, key)) != NULL)
-		return (1);
-	new_node->key = key;
+	len_value = ft_strlen(value);
+	hash = ft_murmurhash2(value, len_value,
+							(t_uint32) &hash_table) % hash_table->size;
+	if ((current_node = ft_ht_lookvalue(hash_table, value, hash)) != NULL)
+		{
+			hash_table->charge += 1;
+			free(current_node->value);
+			current_node->value = value;
+			current_node->len_value = len_value;
+			return (1);
+		}
+	new_node->value = value;
+	new_node->current_node->
 	new_node->next = hash_table->table[hash];
 	hash_table->table[hash] = new_node;
+	hash_table->collision += 1;
 	return (0);
 }
 
@@ -143,7 +150,7 @@ void		ft_ht_free(t_ht *hash_table)
 		{
 			tmp = node;
 			node = node->next;
-			free(tmp->key);
+			free(tmp->value);
 			free(tmp);
 		}
 	}

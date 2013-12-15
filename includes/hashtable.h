@@ -17,14 +17,16 @@
 
 typedef struct	s_ht_node
 {
-	char				*key;
 	char				*value;
+	size_t				len_value;
 	struct s_ht_node	*next;
 }				t_ht_node;
 
 typedef struct	s_ht
 {
 	size_t				size;
+	size_t				charge;
+	size_t				collisions;
 	struct s_ht_node	**table;
 }				t_ht;
 

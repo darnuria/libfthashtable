@@ -23,7 +23,7 @@
 */
 
 /* Pourri recode la. */
-int		read_line(char **line)
+*line	read_line(void)
 {
 	static char	*rest = NULL;
 	ssize_t		ret;
