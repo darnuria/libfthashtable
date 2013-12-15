@@ -15,7 +15,9 @@
 
 #include "ft_string.h"
 #include "hashtable.h"
-#include "ft_utils.h"
+#include "get_next_line.h"
+
+static void	ft_search(t_ht	*hasht, char *line)
 
 static int	ft_putstr(const char *s)
 {
@@ -35,7 +37,7 @@ static int	hotrace(void)
 	tmp = NULL;
 	i = 0;
 	hasht = ft_ht_new(MAX_HASHTABLE);
-	while ((ret = get_next_line(&line) > 0))
+	while ((ret = get_next_line(0, &line) > 0))
 	{
 		i++;
 		if (*line == '\n' && i % 2)

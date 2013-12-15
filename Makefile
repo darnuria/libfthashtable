@@ -35,7 +35,7 @@ LDFLAGS =
 SRC = main.c \
 	hashtable.c \
 	hashtable2.c \
-	ft_utils.c \
+	get_next_line.c \
 	ft_murmurhash.c \
 	ft_string.c \
 	ft_string2.c

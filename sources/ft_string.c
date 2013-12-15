@@ -19,7 +19,8 @@ size_t	ft_strlen(const char *s)
 	char	*s_scroll;
 
 	s_scroll = (char *) s;
-	while (*s_scroll++);
+	while (*s_scroll)
+		++s_scroll;
 	return ((size_t) (s_scroll - s));
 }
 
@@ -39,52 +40,56 @@ int		ft_strcmp(const char *s1, const char *s2)
 
 char	*ft_strncpy(char *s1, const char *s2, size_t n)
 {
-	char	*s;
+	size_t	i;
 
-	s = s1;
-	while (n > 0 && *s2 != '\0')
+	i = 0;
+	while (s2[i] != '\0' && i < n)
 	{
-		*s1++ = *s2++;
-		--n;
+		s1[i] = s2[i];
+		i++;
 	}
-	while (n > 0)
+	while (i < n)
 	{
-		*s1++ = '\0';
-		--n;
+		s1[i] = '\0';
+		i++;
 	}
 	return (s1);
 }
 
 char	*ft_strncat(char *s1, const char *s2, size_t n)
 {
-	char	*dst;
+	size_t	i;
+	size_t	j;
 
-	dst = s1;
-	if (n > 0)
+	i = 0;
+	j = 0;
+	while (s1[i] != '\0')
 	{
-		while (*dst != '\0')
-		{
-			dst++;
-		}
-		while ((*dst = *s2) && --n > 0)
-		{
-			dst++;
-			s2++;
-		}
+		i++;
 	}
+	while ((s1[i] = s2[j]) && j < n)
+	{
+		i++;
+		j++;
+	}
+	s1[i] = '\0';
 	return (s1);
 }
 
+
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
+	size_t		i;
 	char		*dst;
 	const char	*s;
 
 	dst = (char *) dest;
 	s = (char *) src;
-	while (--n)
+	i = 0;
+	while (i < n)
 	{
-		dst[n] = s[n];
+		dst[i] = s[i];
+		i++;
 	}
 	return (dst);
 }

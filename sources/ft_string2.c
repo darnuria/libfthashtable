@@ -22,7 +22,7 @@ char	*ft_strsub(char const *s, const t_uint32 start, const size_t len)
 
 	if (s != NULL)
 	{
-		new_str = (char *) malloc(sizeof(char) * len + 1);
+		new_str = (char *) malloc(sizeof(char) * (len + 1));
 		ft_strncpy(new_str, (char *) &s[start], len);
 		return (new_str);
 	}
