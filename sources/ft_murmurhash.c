@@ -6,7 +6,7 @@
 /*   By: aviala <aviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/12/15 06:31:33 by aviala            #+#    #+#             */
-/*   Updated: 2013/12/15 06:31:33 by aviala           ###   ########.fr       */
+/*   Updated: 2013/12/15 18:22:56 by mde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_uint32	ft_murmurhash2(const char* key, int len, const t_uint32 seed)
 {
 	const t_uint32	m = 0x5bd1e995;
 	const int		r = 24;
-	const t_uchar	*data = (const t_uchar *) key;
+	const t_uchar	*data = (const t_uchar*)key;
 	t_uint32		hash;
 	t_uint32		k;
 

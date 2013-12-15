@@ -6,7 +6,7 @@
 /*   By: aviala <aviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/12/15 08:48:11 by aviala            #+#    #+#             */
-/*   Updated: 2013/12/15 08:48:12 by aviala           ###   ########.fr       */
+/*   Updated: 2013/12/15 18:26:52 by mde-jesu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ static size_t	ft_read_file(char **rest, size_t len_rest)
 
 int				get_next_line(char **line)
 {
-	static	char	*rest = NULL;
-	static	size_t	len_rest = 1;
+	static char	*rest = NULL;
+	static size_t	len_rest = 1;
 	int				ret;
 
 	if (rest == NULL)
