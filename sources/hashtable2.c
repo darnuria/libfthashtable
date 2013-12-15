@@ -6,14 +6,16 @@
 #include "ft_murmurhash.h"
 #include "ft_string.h"
 
+#include <stdio.h>
+
 char	*ft_ht_get(t_ht *hashtable, const char *key,
 											const size_t len_key)
 {
 	t_uint32	hash;
 	t_ht_node	*node;
 
-	hash = ft_murmurhash2(key, len_key, (t_uint32) &hashtable)
-							% hashtable->size;
+	hash = ft_murmurhash2(key, len_key, 973628425) % hashtable->size;
 	node = ft_ht_lookkey(hashtable, key, len_key, hash);
+		printf("hash:%u|key:%s|len_key%lu|sizetab%lu|addr%p\n", hash, key, len_key,hashtable->size, &hashtable);
 	return (node->value);
 }

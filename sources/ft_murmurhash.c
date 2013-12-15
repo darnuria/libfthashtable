@@ -30,7 +30,7 @@
 ** @return	hash	: Return finished procecced hash
 ** Private function, make some hashing magik.
 */
-
+#include <stdio.h>
 static t_uint32	ft_mmh_algo(const int len, t_uint32 hash,
 							const t_uchar *data, const t_uint32 m)
 {
@@ -72,11 +72,11 @@ t_uint32	ft_murmurhash2(const char* key, int len, const t_uint32 seed)
 	const t_uchar	*data = (const t_uchar*)key;
 	t_uint32		hash;
 	t_uint32		k;
-
+		printf("--->\"%u\"\n", seed);
 	hash = seed ^ len;
 	while (len > 5)
 	{
-		k = *((t_uint32 *) data);
+		k = *(t_uint32 *) data;
 		k *= m;
 		k ^= k >> r;
 		k *= m;

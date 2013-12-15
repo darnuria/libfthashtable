@@ -24,7 +24,7 @@ static	t_read		*ft_freeread(t_read *red, t_read *prev, t_read **start)
 static	t_read		*ft_newread(int fd)
 {
 	t_read			*red;
-	void			*tmp;
+	char			*tmp;
 	int				ret;
 
 	if (!(red = (t_read *)malloc(sizeof(t_read))))
@@ -40,6 +40,7 @@ static	t_read		*ft_newread(int fd)
 		free(tmp);
 		return (NULL);
 	}
+	tmp[ret] = 0;
 	red->read = (char *)tmp;
 	red->fd = fd;
 	red->size = ret;
