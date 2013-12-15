@@ -30,8 +30,6 @@ static void	ft_ht_init(t_ht *new_table, size_t size)
 	new_table->size = size;
 	while (--size)
 		new_table->table[size] = NULL;
-	new_table->collisions = 0;
-	new_table->charge = 0;
 }
 
 /*
@@ -74,7 +72,7 @@ t_ht		*ft_ht_new(size_t size)
 ** hashtable[hash]->node->n[ next-> ]key
 */
 
-t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *key,
+t_ht_node	*ft_ht_lookkey(t_ht *hash_table, const char *key,
 								size_t len_key, const t_uint32 hash)
 {
 	t_ht_node		*node;
@@ -114,11 +112,10 @@ int			ft_ht_add_key(t_ht *hash_table, char *value, char *key)
 		return (-1);
 	len_key = ft_strlen(key);
 	hash = ft_murmurhash2(key, len_key, (t_uint32) &hash_table)
-										% hash_table->size;
+							% hash_table->size;
 	if ((current_node = ft_ht_lookkey(hash_table,
 										key, len_key, hash)) != NULL)
 		{
-			hash_table->charge += 1;
 			free(current_node->value);
 			current_node->value = value;
 			current_node->key = key;
@@ -129,7 +126,6 @@ int			ft_ht_add_key(t_ht *hash_table, char *value, char *key)
 	new_node->key = key;
 	new_node->next = hash_table->table[hash];
 	hash_table->table[hash] = new_node;
-	hash_table->collisions += 1;
 	return (0);
 }
 

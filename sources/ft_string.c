@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <string.h>
-#include <stdlib.h>
 
 #include "ft_string.h"
 
@@ -76,21 +75,16 @@ char	*ft_strncat(char *s1, const char *s2, size_t n)
 	return (s1);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	const size_t	len_s1 = ft_strlen(s1);
-	const size_t	len_s2 = ft_strlen(s2);
-	char			*new_str;
-	size_t			len_mix;
+	char		*dst;
+	const char	*s;
 
-	len_mix = len_s1 + len_s2;
-	if ((new_str = (char *) malloc(sizeof(char) * (len_mix + 1))) != NULL)
+	dst = (char *) dest;
+	s = (char *) src;
+	while (--n)
 	{
-		if (len_mix != 0)
-		{
-			ft_strncpy(new_str, s1, len_s1);
-			ft_strncat(new_str, s2, len_mix);
-		}
+		dst[n] = s[n];
 	}
-	return (new_str);
+	return (dst);
 }

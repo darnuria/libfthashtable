@@ -10,7 +10,69 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int main(void)
+#include <unistd.h>
+#include <string.h>
+
+#include "ft_string.h"
+#include "hashtable.h"
+#include "ft_utils.h"
+
+static int	ft_putstr(const char *s)
 {
-	return (0);
+	return (write(0, s, ft_strlen(s)));
+}
+
+static int	hotrace(void)
+{
+	t_ht	*hasht;
+	char	*line;
+	char	*tmp;
+	int		ret;
+	int		searchMod = 0;
+	size_t	i;
+
+	line = NULL;
+	tmp = NULL;
+	i = 0;
+	hasht = ft_ht_new(MAX_HASHTABLE);
+	while ((ret = get_next_line(&line) > 0))
+	{
+		i++;
+		if (*line == '\n' && i % 2)
+			searchMod = 1;
+		else if (searchMod == 0)
+		{
+			if (i % 2)
+			{
+				tmp = line;
+				continue ;
+			}
+			else
+				ft_ht_add_key(hasht, line, tmp);
+		}
+		else if (searchMod == 1)
+		{
+			if ((tmp = ft_ht_get(hasht, line, ft_strlen(line))) != NULL)
+			{
+				ft_putstr(tmp);
+				write(1, "\n", 1);
+			}
+			else
+			{
+				ft_putstr(line);
+				ft_putstr(": Not found.\n");
+			}
+		}
+	}
+	ft_ht_free(hasht);
+	if (ret > -1)
+		return (0);
+	return (-1);
+}
+
+int			main(void)
+{
+	if (!hotrace())
+		return (0);
+	return (-1);
 }

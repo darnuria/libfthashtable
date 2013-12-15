@@ -10,12 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/types.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "ft_utils.h"
 #include "ft_string.h"
 #include "ft_types.h"
 
@@ -35,18 +32,23 @@ char	*ft_strsub(char const *s, const t_uint32 start, const size_t len)
 	}
 }
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char		*dst;
-	const char	*s;
+	const size_t	len_s1 = ft_strlen(s1);
+	const size_t	len_s2 = ft_strlen(s2);
+	char			*new_str;
+	size_t			len_mix;
 
-	dst = (char *) dest;
-	s = (char *) src;
-	while (--n)
+	len_mix = len_s1 + len_s2;
+	if ((new_str = (char *) malloc(sizeof(char) * (len_mix + 1))) != NULL)
 	{
-		dst[n] = s[n];
+		if (len_mix != 0)
+		{
+			ft_strncpy(new_str, s1, len_s1);
+			ft_strncat(new_str, s2, len_mix);
+		}
 	}
-	return (dst);
+	return (new_str);
 }
 
 char	*ft_strdup(const char *s1)

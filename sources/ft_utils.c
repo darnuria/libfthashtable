@@ -56,7 +56,7 @@ static size_t	ft_read_file(char **rest, size_t len_rest)
 
 int				get_next_line(char **line)
 {
-	static char	*rest = NULL;
+	static char		*rest = NULL;
 	static size_t	len_rest = 1;
 	int				ret;
 
