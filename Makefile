@@ -33,7 +33,8 @@ endif
 
 LDFLAGS =
 SRC = main.c \
-		read_line.c
+		read_line.c \
+		hastable.c
 OBJS = $(SRC:.c=.o)
 #OBJS_PREF = $(addprefix $(OBJDIR)/, $(OBJS))
 

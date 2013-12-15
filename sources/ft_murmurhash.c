@@ -1,7 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_murmurhash.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aviala <aviala@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/12/15 06:31:33 by aviala            #+#    #+#             */
+/*   Updated: 2013/12/15 06:31:33 by aviala           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include <string.h>
 #include "ft_murmurhash.h"
 #include "ft_types.h"
+
+/*
+** Reference : MurmurHash
+** https://sites.google.com/site/murmurhash/
+*/
+
+/*
+** static t_uint32 ft_mmh_algo(const size_t len, t_uint32 hash,
+**							const t_uchar *data, const t_uint32 m)
+** @param	len		: Size to operate on the string.
+** @param	hash	: pre-Hash to process.
+** @param	*data	: Data to crunch for retriving hash.
+** @param	m		: Mixing constant generated offline.
+** @return	hash	: Return finished procecced hash
+** Private function, make some hashing magik.
+*/
 
 static t_uint32	ft_mmh_algo(const size_t len, t_uint32 hash,
 							const t_uchar *data, const t_uint32 m)
@@ -27,6 +54,16 @@ static t_uint32	ft_mmh_algo(const size_t len, t_uint32 hash,
 	return (hash)
 }
 
+/*
+** t_uint32 ft_murmurhash2(const char* key, size_t len, const t_uint32 seed)
+** @param	key			: Key to hash.
+** @param	len			: Lenght of the string to hash.
+** @seed	seed		: Random seed used for one Hashtable.
+** @return	t_uint32	: Fresh computed hash.
+** 'm' and 'r' are mixing constants generated offline.
+** They're not really 'magic', they just happen to work well.
+*/
+
 t_uint32	ft_murmurhash2(const char* key, size_t len, const t_uint32 seed)
 {
 	const t_uint32	m = 0x5bd1e995;
@@ -51,6 +88,5 @@ t_uint32	ft_murmurhash2(const char* key, size_t len, const t_uint32 seed)
 	hash ^= hash >> 13;
 	hash *= m;
 	hash ^= hash >> 15;
-
 	return (hash);
 }
