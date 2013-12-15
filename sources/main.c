@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_line.h                                        :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mde-jesu <mde-jesu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aviala <aviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/12/14 20:02:43 by mde-jesu          #+#    #+#             */
-/*   Updated: 2013/12/14 20:04:12 by aviala           ###   ########.fr       */
+/*   Created: 2013/12/15 06:55:30 by aviala            #+#    #+#             */
+/*   Updated: 2013/12/15 06:55:51 by aviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef READ_LINE_H
-# define READ_LINE_H
-
-int		read_line(char **line);
-
-#endif /* !READ_LINE_H */
+int main(void)
+{
+	return (0);
+}

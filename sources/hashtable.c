@@ -78,7 +78,7 @@ t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *key)
 	node = hash_table->table[hash])
 	while (node != NULL)
 	{
-		if (ft_strcmp(key, node->key) == 0)
+		if (ft_ht_strcmp(key, node->key) == 0)
 		{
 			return (node);
 		}
