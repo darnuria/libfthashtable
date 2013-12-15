@@ -22,12 +22,13 @@
 static int		ft_found_line(char **line, char *rest,
 								size_t size, size_t len_rest)
 {
-	const size_t	len_line = ft_strlen(*line);
-	char			*pos_cur;
+	size_t	len_line;
+	char	*pos_cur;
 
 	if ((pos_cur = (char *)ft_memchr(rest, '\n', len_rest)) != NULL)
 	{
-		*line = ft_strsub(rest, 0, (size_t) (pos_cur - rest));
+		len_line = (size_t) (pos_cur - rest);
+		*line = ft_strsub(rest, 0, len_line);
 		len_rest -= len_line;
 		ft_memmove(rest, rest + (len_line + 1), len_rest);
 	}
