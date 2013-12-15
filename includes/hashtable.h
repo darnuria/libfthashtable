@@ -14,11 +14,15 @@
 # define HASHTABLE_H
 
 # include <string.h>
+# include "ft_types.h"
+
+# define MAX_HASHTABLE 2048000000
 
 typedef struct	s_ht_node
 {
 	char				*value;
-	size_t				len_value;
+	char				*key;
+	size_t				len_key;
 	struct s_ht_node	*next;
 }				t_ht_node;
 
@@ -31,8 +35,9 @@ typedef struct	s_ht
 }				t_ht;
 
 t_ht		*ft_ht_new(size_t size);
-t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *key);
-int			ft_ht_add_key(t_ht *hash_table, char *key);
+t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *value,
+								size_t len_value, const t_uint32 hash);
+int			ft_ht_add_key(t_ht *hash_table, char *value, char *key);
 void		ft_ht_free(t_ht *hash_table);
 
 #endif /* !HASHTABLE_H */

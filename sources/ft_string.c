@@ -20,7 +20,7 @@ size_t	ft_strlen(const char *s)
 	char	*s_scroll;
 
 	s_scroll = (char *) s;
-	while (*s++);
+	while (*s_scroll++);
 	return ((size_t) (s_scroll - s));
 }
 
@@ -86,7 +86,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	len_mix = len_s1 + len_s2;
 	if ((new_str = (char *) malloc(sizeof(char) * (len_mix + 1))) != NULL)
 	{
-		if ((len_mix) != 0)
+		if (len_mix != 0)
 		{
 			ft_strncpy(new_str, s1, len_s1);
 			ft_strncat(new_str, s2, len_mix);

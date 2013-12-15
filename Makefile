@@ -34,8 +34,10 @@ endif
 LDFLAGS =
 SRC = main.c \
 	hashtable.c \
+	ft_utils.c \
 	ft_murmurhash.c \
-	ft_string.c
+	ft_string.c \
+	ft_string2.c \
 #	ft_utils.c
 OBJS = $(SRC:.c=.o)
 OBJS_PREF = $(addprefix $(OBJDIR)/, $(OBJS))

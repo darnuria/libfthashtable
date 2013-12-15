@@ -16,5 +16,6 @@
 # define BUFF_SIZE 42
 
 int		read_line(char **line);
+int		get_next_line(char **line);
 
 #endif /* !READ_LINE_H */

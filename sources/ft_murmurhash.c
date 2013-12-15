@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <string.h>
+
 #include "ft_murmurhash.h"
 #include "ft_types.h"
 
@@ -30,7 +31,7 @@
 ** Private function, make some hashing magik.
 */
 
-static t_uint32	ft_mmh_algo(const size_t len, t_uint32 hash,
+static t_uint32	ft_mmh_algo(const int len, t_uint32 hash,
 							const t_uchar *data, const t_uint32 m)
 {
 	t_uchar status;
@@ -64,7 +65,7 @@ static t_uint32	ft_mmh_algo(const size_t len, t_uint32 hash,
 ** They're not really 'magic', they just happen to work well.
 */
 
-t_uint32	ft_murmurhash2(const char* key, size_t len, const t_uint32 seed)
+t_uint32	ft_murmurhash2(const char* key, int len, const t_uint32 seed)
 {
 	const t_uint32	m = 0x5bd1e995;
 	const int		r = 24;
