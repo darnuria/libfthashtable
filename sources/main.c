@@ -17,13 +17,27 @@
 #include "hashtable.h"
 #include "get_next_line.h"
 
-static void	ft_search(t_ht	*hasht, char *line)
-
 static int	ft_putstr(const char *s)
 {
 	return (write(0, s, ft_strlen(s)));
 }
 
+static void	ft_search(t_ht	*hasht, char *line, size_t len)
+{
+	char	*tmp;
+
+	if ((tmp = ft_ht_get(hasht, line, len)) != NULL)
+	{
+		ft_putstr(tmp);
+		write(1, "\n", 1);
+	}
+	else
+	{
+		ft_putstr(line);
+		ft_putstr(": Not found.\n");
+	}
+}
+#include <stdio.h>
 static int	hotrace(void)
 {
 	t_ht	*hasht;
@@ -40,8 +54,10 @@ static int	hotrace(void)
 	while ((ret = get_next_line(0, &line) > 0))
 	{
 		i++;
-		if (*line == '\n' && i % 2)
+		if (*line == '\0' && i % 2)
+		{
 			searchMod = 1;
+		}
 		else if (searchMod == 0)
 		{
 			if (i % 2)
@@ -50,20 +66,13 @@ static int	hotrace(void)
 				continue ;
 			}
 			else
+			{
 				ft_ht_add_key(hasht, line, tmp);
+			}
 		}
 		else if (searchMod == 1)
 		{
-			if ((tmp = ft_ht_get(hasht, line, ft_strlen(line))) != NULL)
-			{
-				ft_putstr(tmp);
-				write(1, "\n", 1);
-			}
-			else
-			{
-				ft_putstr(line);
-				ft_putstr(": Not found.\n");
-			}
+			ft_search(hasht, line, ft_strlen(line));
 		}
 	}
 	ft_ht_free(hasht);
