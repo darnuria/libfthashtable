@@ -6,8 +6,6 @@
 #include "ft_murmurhash.h"
 #include "ft_string.h"
 
-#include <stdio.h>
-
 char	*ft_ht_get(t_ht *hashtable, const char *key,
 											const size_t len_key)
 {

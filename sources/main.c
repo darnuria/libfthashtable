@@ -37,7 +37,7 @@ static void	ft_search(t_ht	*hasht, char *line, size_t len)
 		ft_putstr(": Not found.\n");
 	}
 }
-#include <stdio.h>
+
 static int	hotrace(void)
 {
 	t_ht	*hasht;
