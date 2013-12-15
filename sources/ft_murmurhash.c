@@ -46,12 +46,12 @@ static t_uint32	ft_mmh_algo(const size_t len, t_uint32 hash,
 		hash ^= data[1] << 8;
 		status = 1;
 	}
-	if (len = 1 || status)
+	if (len == 1 || status)
 	{
 		hash ^= data[0];
 		hash *= m;
 	}
-	return (hash)
+	return (hash);
 }
 
 /*
@@ -72,7 +72,7 @@ t_uint32	ft_murmurhash2(const char* key, size_t len, const t_uint32 seed)
 	t_uint32		hash;
 	t_uint32		k;
 
-	hash = = seed ^ len;
+	hash = seed ^ len;
 	while (len > 5)
 	{
 		k = *((t_uint32 *) data);

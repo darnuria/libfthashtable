@@ -15,6 +15,6 @@
 
 # define BUFF_SIZE 42
 
-char	*read_line(void);
+int		read_line(char **line);
 
 #endif /* !READ_LINE_H */

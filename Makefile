@@ -6,7 +6,7 @@
 #    By: aviala <aviala@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/12/14 20:00:55 by aviala            #+#    #+#              #
-#    Updated: 2013/12/15 06:55:10 by aviala           ###   ########.fr        #
+#    Updated: 2013/12/15 12:56:34 by aviala           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,10 +33,10 @@ endif
 
 LDFLAGS =
 SRC = main.c \
-		hastable.c \
-		ft_murmurhash.c \
-		ft_utils.c \
-		ft_string.c
+	hashtable.c \
+	ft_murmurhash.c \
+	ft_string.c
+#	ft_utils.c
 OBJS = $(SRC:.c=.o)
 OBJS_PREF = $(addprefix $(OBJDIR)/, $(OBJS))
 

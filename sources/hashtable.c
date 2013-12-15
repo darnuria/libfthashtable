@@ -10,8 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <string.h>
+#include <stdlib.h>
+
 #include "hashtable.h"
 #include "ft_types.h"
+#include "ft_murmurhash.h"
+#include "ft_string.h"
 
 /*
 ** static void	ft_ht_init(t_ht *new_table, size_t size)
@@ -39,22 +44,21 @@ static void	ft_ht_init(t_ht *new_table, size_t size)
 t_ht		*ft_ht_new(size_t size)
 {
 	t_ht	*new_table;
-	size_t	i;
 
 	if (size < 1)
 		return (NULL);
-	if ((new_table = (t_ht *) malloc(sizeof(t_ht)) == NULL)
+	if ((new_table = (t_ht *) malloc(sizeof(t_ht))) == NULL)
 		return (NULL);
 	if ((new_table->table = (t_ht_node **) malloc(sizeof(t_ht_node *)
-												* size) == NULL)
+													* size)) == NULL)
 		return (NULL);
-	init_ht(new_table, size);
+	ft_ht_init(new_table, size);
 	return (new_table);
 }
 
 /*
 ** t_ht_node	*ft_lookkey(t_ht *hash_table, char *key)
-** Look up for a key at hash_table[hash(str)]->node->key
+** Look up for a key at hash_table[hash(key)]->node->key
 **
 ** @param	hash_table	: Hashtable where were lookup for a key.
 ** @param	key			: Key associated to a value.
@@ -72,13 +76,14 @@ t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *key)
 {
 
 	const t_uint32	hash = ft_murmurhash2(key, ft_strlen(key),
-											&hash_table) % hash_table->size;
+											(t_uint32) &hash_table)
+											% hash_table->size;
 	t_ht_node		*node;
 
-	node = hash_table->table[hash])
+	node = hash_table->table[hash];
 	while (node != NULL)
 	{
-		if (ft_ht_strcmp(key, node->key) == 0)
+		if (ft_strcmp(key, node->key) == 0)
 		{
 			return (node);
 		}
@@ -101,15 +106,16 @@ t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *key)
 int			ft_ht_add_key(t_ht *hash_table, char *key)
 {
 	const t_uint32	hash = ft_murmurhash2(key, ft_strlen(key),
-											&hash_table) % hash_table->size;
-	t_ht_node	*new_node;
-	t_ht_node	*current_node;
+											(t_uint32) &hash_table)
+											% hash_table->size;
+	t_ht_node		*new_node;
+	t_ht_node		*current_node;
 
-	if ((new_node = (t_ht_node*) malloc(sizeof(t_ht_node)) == NULL))
+	if ((new_node = (t_ht_node*) malloc(sizeof(t_ht_node))) == NULL)
 		return (-1);
-	if ((current_node = ft_lookkey(hash_table, key)) != NULL)
+	if ((current_node = ft_ht_lookkey(hash_table, key)) != NULL)
 		return (1);
-	new_node->str = str;
+	new_node->key = key;
 	new_node->next = hash_table->table[hash];
 	hash_table->table[hash] = new_node;
 	return (0);
@@ -123,20 +129,20 @@ int			ft_ht_add_key(t_ht *hash_table, char *key)
 
 void		ft_ht_free(t_ht *hash_table)
 {
-	int			i;
+	size_t		i;
 	t_ht_node	*node;
 	t_ht_node	*tmp;
 
 	if (hash_table == NULL)
-		return ();
+		return ;
 	i = 0;
 	while (i < hash_table->size)
 	{
 		node = hash_table->table[i];
-		while (list != NULL)
+		while (node != NULL)
 		{
-			tmp = list;
-			node = list->next;
+			tmp = node;
+			node = node->next;
 			free(tmp->key);
 			free(tmp);
 		}

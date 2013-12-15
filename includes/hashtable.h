@@ -24,8 +24,13 @@ typedef struct	s_ht_node
 
 typedef struct	s_ht
 {
-	size_t		size;
-	s_ht_node	**table;
+	size_t				size;
+	struct s_ht_node	**table;
 }				t_ht;
+
+t_ht		*ft_ht_new(size_t size);
+t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *key);
+int			ft_ht_add_key(t_ht *hash_table, char *key);
+void		ft_ht_free(t_ht *hash_table);
 
 #endif /* !HASHTABLE_H */
