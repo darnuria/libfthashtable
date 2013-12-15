@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hashtable.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aviala <aviala@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/12/15 06:31:22 by aviala            #+#    #+#             */
+/*   Updated: 2013/12/15 06:31:24 by aviala           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "hashtable.h"
 #include "ft_types.h"
@@ -106,6 +117,7 @@ int			ft_ht_add_key(t_ht *hash_table, char *key)
 
 /*
 ** void	ft_ht_free(t_ht *hash_table)
+** @param	hash_table	: Hashtable who need to be free.
 ** Free all of the entry of the hashtable.
 */
 
