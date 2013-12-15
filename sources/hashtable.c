@@ -72,7 +72,7 @@ t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *key)
 {
 
 	const t_uint32	hash = ft_murmurhash2(key, ft_strlen(key),
-												&hash_table);
+											&hash_table) % hash_table->size;
 	t_ht_node		*node;
 
 	node = hash_table->table[hash])
@@ -101,7 +101,7 @@ t_ht_node	*ft_ht_lookkey(t_ht *hash_table, char *key)
 int			ft_ht_add_key(t_ht *hash_table, char *key)
 {
 	const t_uint32	hash = ft_murmurhash2(key, ft_strlen(key),
-												&hash_table);
+											&hash_table) % hash_table->size;
 	t_ht_node	*new_node;
 	t_ht_node	*current_node;
 
