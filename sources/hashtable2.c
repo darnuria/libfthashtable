@@ -15,7 +15,8 @@ char	*ft_ht_get(t_ht *hashtable, const char *key,
 	t_ht_node	*node;
 
 	hash = ft_murmurhash2(key, len_key, 973628425) % hashtable->size;
-	node = ft_ht_lookkey(hashtable, key, len_key, hash);
-		printf("hash:%u|key:%s|len_key%lu|sizetab%lu|addr%p\n", hash, key, len_key,hashtable->size, &hashtable);
-	return (node->value);
+
+	if ((node = ft_ht_lookkey(hashtable, key, len_key, hash)) != NULL)
+		return (node->value);
+	return (NULL);
 }

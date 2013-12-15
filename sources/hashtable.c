@@ -100,7 +100,7 @@ t_ht_node	*ft_ht_lookkey(t_ht *hash_table, const char *key,
 ** new_node->next = hash_table->table[hash];
 ** hash_table->table[hash] = new_node;
 */
-#include <stdio.h>
+
 int			ft_ht_add_key(t_ht *hash_table, char *value, char *key)
 {
 	t_uint32		hash;
@@ -112,7 +112,6 @@ int			ft_ht_add_key(t_ht *hash_table, char *value, char *key)
 		return (-1);
 	len_key = ft_strlen(key);
 	hash = ft_murmurhash2(key, len_key, 973628425) % hash_table->size;
-	printf("hash:%u|key:%s|len_key%lu|sizetab%lu|addr%p\n", hash, key, len_key,hash_table->size, hash_table);
 	if ((current_node = ft_ht_lookkey(hash_table,
 										key, len_key, hash)) != NULL)
 		{
@@ -124,6 +123,7 @@ int			ft_ht_add_key(t_ht *hash_table, char *value, char *key)
 		}
 	new_node->value = value;
 	new_node->key = key;
+	new_node->len_key = len_key;
 /*	new_node->next = hash_table->table[hash];*/
 	hash_table->table[hash] = new_node;
 	return (0);
