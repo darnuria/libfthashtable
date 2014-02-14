@@ -10,11 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "hashtable.h"
-#include "ft_types.h"
 #include "ft_murmurhash.h"
 #include "ft_string.h"
 
@@ -73,7 +72,7 @@ t_ht		*ft_ht_new(size_t size)
 */
 
 t_ht_node	*ft_ht_lookkey(t_ht *hash_table, const char *key,
-								size_t len_key, const t_uint32 hash)
+								size_t len_key, const uint32_t hash)
 {
 	t_ht_node		*node;
 
@@ -103,7 +102,7 @@ t_ht_node	*ft_ht_lookkey(t_ht *hash_table, const char *key,
 
 int			ft_ht_add_key(t_ht *hash_table, char *value, char *key)
 {
-	t_uint32		hash;
+	uint32_t		hash;
 	t_ht_node		*new_node;
 	t_ht_node		*current_node;
 	size_t			len_key;

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include <stdint.h>
 
 #include "ft_string.h"
 
@@ -20,7 +20,9 @@ size_t	ft_strlen(const char *s)
 
 	s_scroll = (char *) s;
 	while (*s_scroll)
+	{
 		++s_scroll;
+	}
 	return ((size_t) (s_scroll - s));
 }
 
