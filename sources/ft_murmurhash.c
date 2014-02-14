@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+# include <stdint.h>
 
-#include "ft_murmurhash.h"
-#include "ft_types.h"
+# include "ft_murmurhash.h"
 
 /*
 ** Reference : MurmurHash
@@ -30,10 +29,11 @@
 ** @return	hash	: Return finished procecced hash
 ** Private function, make some hashing magik.
 */
-static t_uint32	ft_mmh_algo(const int len, t_uint32 hash,
-							const t_uchar *data, const t_uint32 m)
+
+static uint32_t	ft_mmh_algo(const int len, uint32_t hash,
+							const uint8_t *data, const uint32_t m)
 {
-	t_uchar status;
+	uint8_t status;
 
 	status = 0;
 	if (len == 3)
@@ -54,28 +54,18 @@ static t_uint32	ft_mmh_algo(const int len, t_uint32 hash,
 	return (hash);
 }
 
-/*
-** t_uint32 ft_murmurhash2(const char* key, size_t len, const t_uint32 seed)
-** @param	key			: Key to hash.
-** @param	len			: Lenght of the string to hash.
-** @seed	seed		: Random seed used for one Hashtable.
-** @return	t_uint32	: Fresh computed hash.
-** 'm' and 'r' are mixing constants generated offline.
-** They're not really 'magic', they just happen to work well.
-*/
-
-t_uint32	ft_murmurhash2(const char* key, int len, const t_uint32 seed)
+uint32_t	ft_murmurhash2(const char* key, int len, const uint32_t seed)
 {
-	const t_uint32	m = 0x5bd1e995;
+	const uint32_t	m = 0x5bd1e995;
 	const int		r = 24;
-	const t_uchar	*data = (const t_uchar*)key;
-	t_uint32		hash;
-	t_uint32		k;
+	const uint8_t	*data = (const uint8_t *)key;
+	uint32_t		hash;
+	uint32_t		k;
 
 	hash = seed ^ len;
 	while (len > 5)
 	{
-		k = *(t_uint32 *) data;
+		k = *(uint32_t *) data;
 		k *= m;
 		k ^= k >> r;
 		k *= m;
