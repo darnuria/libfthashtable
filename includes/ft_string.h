@@ -1,7 +1,8 @@
 #ifndef FT_STRING_H
 # define FT_STRING_H
 
-#include <stddef.h>
+# include <stddef.h>
+# include <stdint.h>
 
 size_t	ft_strlen(const char *s);
 int		ft_strcmp(const char *s1, const char *s2);
