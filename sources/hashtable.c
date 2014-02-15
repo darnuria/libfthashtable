@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <stdint.h>
+#include <stddef.h>
 
 #include "hashtable.h"
 #include "ft_murmurhash.h"

@@ -1,15 +1,17 @@
-#include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "hashtable.h"
-#include "ft_types.h"
 #include "ft_murmurhash.h"
 #include "ft_string.h"
 
+/*
+** Think about moving the seed into hashtable-seed
+*/
 char	*ft_ht_get(t_ht *hashtable, const char *key,
 											const size_t len_key)
 {
-	t_uint32	hash;
+	uint32_t	hash;
 	t_ht_node	*node;
 
 	hash = ft_murmurhash2(key, len_key, 973628425) % hashtable->size;
