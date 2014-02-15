@@ -11,12 +11,11 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <string.h>
+#include <stdint.h>
 
 #include "ft_string.h"
-#include "ft_types.h"
 
-char	*ft_strsub(char const *s, const t_uint32 start, const size_t len)
+char	*ft_strsub(char const *s, const uint32_t start, const size_t len)
 {
 	char	*new_str;
 
@@ -68,12 +67,12 @@ char	*ft_strdup(const char *s1)
 
 void	*ft_memchr(const void *s, int c, size_t n)
 {
-	const t_uchar	*str;
+	const uint8_t	*str;
 	size_t			i;
 
-	str = (t_uchar *) s;
+	str = (uint8_t *) s;
 	i = 0;
-	while (i < n && str[i] != (t_uchar) c)
+	while (i < n && str[i] != (uint8_t) c)
 	{
 		i++;
 	}
