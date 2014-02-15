@@ -11,26 +11,8 @@
 # **************************************************************************** #
 
 NAME = hotrace
-DEBUG = yes
-LD = $(CC)
 SRCDIR = ./sources
 OBJDIR = ./objects
-INCDIR = -I./includes
-
-ifeq ($(DEBUG),yes)
-	CC = clang
-	CFLAGS = -fstack-protector-all -ansi -Wshadow -Wall -Werror -Wextra \
-		-Wunreachable-code -Wstack-protector -pedantic-errors \
-		-Wfatal-errors -Wstrict-prototypes -Wmissing-prototypes \
-		-Wwrite-strings -Wunreachable-code -pedantic \
-		-Wunknown-pragmas -Wdeclaration-after-statement \
-		-Wold-style-definition -Wmissing-field-initializers \
-		-Winline -g -W
-else
-	CC = gcc
-	CFLAGS= -Wall -Wextra -Werror -O3
-endif
-
 LDFLAGS =
 SRC = main.c \
 	hashtable.c \
@@ -39,8 +21,28 @@ SRC = main.c \
 	ft_murmurhash.c \
 	ft_string.c \
 	ft_string2.c
+INCDIR = -I./includes
+CFLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors
+
+ifeq ($(DEBUG),yes)
+	CC = clang
+	CFLAGS += -ggdb3 -fstack-protector-all -Wshadow -Wunreachable-code \
+		-Wstack-protector -pedantic-errors -O0 -W -Wundef -fno-common \
+		-Wfatal-errors -Wstrict-prototypes -Wmissing-prototypes -pedantic \
+		-Wwrite-strings -Wunknown-pragmas -Wdeclaration-after-statement\
+		-Wold-style-definition -Wmissing-field-initializers -Wfloat-equal\
+		-Wpointer-arith -Wnested-externs -Wstrict-overflow=5 -fno-common\
+		-Wno-missing-field-initializers -Wswitch-default -Wswitch-enum \
+		-Wbad-function-cast -Wredundant-decls -fno-omit-frame-pointer
+		-std=c89
+else
+	CC = gcc
+	CFLAGS += -O3
+endif
+
 OBJS = $(SRC:.c=.o)
 OBJS_PREF = $(addprefix $(OBJDIR)/, $(OBJS))
+LD = $(CC)
 
 all: $(NAME)
 
@@ -57,6 +59,5 @@ fclean: clean
 	@rm -f $(NAME)
 
 re: fclean all
-
 
 .PHONY: clean fclean re all
