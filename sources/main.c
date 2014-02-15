@@ -29,7 +29,7 @@ static void	ft_search(t_ht	*hasht, char *line, size_t len)
 	if ((tmp = ft_ht_get(hasht, line, len)) != NULL)
 	{
 		ft_putstr(tmp);
-		write(1, "\n", 1);
+		ft_putstr("\n");
 	}
 	else
 	{
