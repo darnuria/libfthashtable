@@ -10,12 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = hotrace
+NAME = libsimpleHash
 SRCDIR = ./sources
 OBJDIR = ./objects
 LDFLAGS =
-SRC = main.c \
-	hashtable.c \
+SRC = hashtable.c \
 	hashtable2.c \
 	get_next_line.c \
 	ft_murmurhash.c \
@@ -47,11 +46,12 @@ LD = $(CC)
 all: $(NAME)
 
 $(NAME): $(OBJS_PREF)
-	$(LD) -o $@ $^ $(LDFLAGS) $(INCDIR)
+	@echo "Linking $@."
+	@ar rcs $@.a $^
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) -o $@ -c $< $(CFLAGS) $(INCDIR)
-
+	@echo "Compiling $@ into $<"
+	@$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
 clean:
 	@rm -f $(OBJS_PREF)
 
