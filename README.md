@@ -1,4 +1,5 @@
 simple_hashtable
 ================
 
-A simple implementation of Hashtable in C89 under MIT licence with murmurhash algorithm.
+A simple implementation of Hashtable in C89 under public domaine, with murmurhash algorithm
+which is under Mit Licence.
