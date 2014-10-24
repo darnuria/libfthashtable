@@ -7,20 +7,6 @@
 #include "my_string.h"
 
 /*
- ** static void ft_ht_init(t_ht *new_table, size_t size)
- ** @param new_table : Pointer to the fresh hashtable.
- ** @param size  : Size of the hashtable.
- ** Private function initialise hashtable
- */
-
-static void ft_ht_init(t_ht *new_table, size_t size) {
-  new_table->size = size;
-  while (--size) {
-    new_table->table[size] = NULL;
-  }
-}
-
-/*
  ** t_ht *ft_ht_new(size_t size)
  ** @param size : Size of the hashtable.
  ** @return *t_ht : Pointer to the fresh hashtable struct.
@@ -29,16 +15,16 @@ static void ft_ht_init(t_ht *new_table, size_t size) {
  */
 
 t_ht  *ft_ht_new(size_t size) {
-  t_ht *new_table;
+  t_ht *new_table = calloc(1, sizeof(t_ht));
 
   if (size < 1) {
     return (NULL);
-  } else if ((new_table = (t_ht *) malloc(sizeof(t_ht))) == NULL) {
-    return (NULL);
-  } else if ((new_table->table = (t_ht_node **) malloc(sizeof(t_ht_node *) * size)) == NULL) {
-    return (NULL);
-  } else {
-    ft_ht_init(new_table, size);
+  } else if (new_table) {
+    new_table->table = calloc(size, sizeof(t_ht_node *));
+    if (new_table->table == NULL) {
+      free(new_table);
+      return (NULL);
+    }
   }
   return (new_table);
 }
@@ -92,7 +78,7 @@ int   ft_ht_add_key(t_ht *hash_table, char *value, char *key) {
   }
 
   size_t len_key = strlen(key);
-  uint32_t hash = ft_murmurhash2(key, len_key, 973628425) % hash_table->size;
+  uint32_t hash = ft_murmurhash2(key, len_key, seed) % hash_table->size;
   t_ht_node *current_node = ft_ht_lookkey(hash_table, key, len_key, hash);
   if (current_node != NULL) {
     free(current_node->value);
@@ -116,8 +102,6 @@ int   ft_ht_add_key(t_ht *hash_table, char *value, char *key) {
  */
 
 void  ft_ht_free(t_ht *hash_table) {
-  size_t  i;
-
   if (hash_table == NULL) {
     return ;
   }
@@ -139,10 +123,12 @@ void  ft_ht_free(t_ht *hash_table) {
  ** Think about moving the seed into hashtable-seed
  */
 char *ft_ht_get(t_ht *hashtable, const char *key, const size_t len_key) {
-  uint32_t hash = ft_murmurhash2(key, len_key, 973628425) % hashtable->size;
+  uint32_t hash = ft_murmurhash2(key, len_key, seed) % hashtable->size;
   t_ht_node *node = ft_ht_lookkey(hashtable, key, len_key, hash);
 
-  if (node != NULL)
+  if (node != NULL) {
     return (node->value);
-  return (NULL);
+  } else {
+    return (NULL);
+  }
 }
