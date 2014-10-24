@@ -30,8 +30,8 @@ def main(max):
 	filename_tmp = "file_tmp.txt"
 	final_file = "dataset.txt"
 	q = JoinableQueue()
-	tuan_worker = Process(target=tuan, args=(q, filename_tmp,))
-	tuan_worker.start() # start tuan.
+	_worker = Process(target=tuan, args=(q, filename_tmp,))
+	_worker.start()
 	alphanum = printable[0:62]
 	alpha = printable[10:62]
 	with open(final_file, "w") as f:
@@ -47,13 +47,13 @@ def main(max):
 		else:
 			q.put(None)
 			q.join()
-			tuan_worker.join() # kill tuan.
+			_worker.join()
 			print(file=f)
 			with open(filename_tmp, "r") as f2:
 				copyfileobj(f2, f)
 			print("Removing {}".format(filename_tmp))
 			remove(filename_tmp)
-	print("Work is done. =D")
+	print("Work is done.")
 
 if __name__ == "__main__":
 	if(len(argv) == 2):

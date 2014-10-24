@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libsimpleHash
+NAME = libnaive_hashtable
 SRCDIR = ./sources
 OBJDIR = ./objects
 LDFLAGS =
