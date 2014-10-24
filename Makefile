@@ -13,14 +13,9 @@
 NAME = libsimpleHash
 SRCDIR = ./sources
 OBJDIR = ./objects
-LDFLAGS =
-SRC = hashtable.c \
-	hashtable2.c \
-	get_next_line.c \
-	ft_murmurhash.c \
-	ft_string.c \
-	ft_string2.c
-INCDIR = -I./includes
+LDFLAGS = -lmy_stdext
+SRC = hashtable.c ft_murmurhash.c
+INCDIR = -I./includes ./my_stdext/includes
 CFLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors
 
 ifeq ($(DEBUG),yes)
