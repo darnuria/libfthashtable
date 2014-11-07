@@ -3,54 +3,63 @@
 #include <string.h>
 
 #include "hashtable.h"
-#include "ft_murmurhash.h"
-#include "my_string.h"
+#include "murmurhash.h"
+#include "../my_stdext/includes/my_string.h"
 
 /*
- ** t_ht *ft_ht_new(size_t size)
- ** @param size : Size of the hashtable.
- ** @return *t_ht : Pointer to the fresh hashtable struct.
- ** Return a new hashtable with all entry set to NULL,
- ** and size set to size.
+ * size : Size of the hashtable.
+ * ht_Hashtable : Pointer to the fresh hashtable struct.
+ * Return a new hashtable with all entry set to NULL,
+ * and size set to size.
  */
 
-t_ht  *ft_ht_new(size_t size) {
-  t_ht *new_table = calloc(1, sizeof(t_ht));
-
-  if (size < 1) {
-    return (NULL);
-  } else if (new_table) {
-    new_table->table = calloc(size, sizeof(t_ht_node *));
+ht_Hashtable  *ht_new(size_t size, uint32_t seed) {
+  ht_Hashtable *new_table = calloc(1, sizeof(ht_Hashtable));
+  if (new_table) {
+    new_table->table = calloc(size, sizeof(ht_Bucket *));
+    new_table->seed = seed;
     if (new_table->table == NULL) {
-      free(new_table);
-      return (NULL);
+    free(new_table);
+    return (NULL);
     }
   }
   return (new_table);
 }
 
+static
+ht_Bucket *ht_new_node(
+    const char *key,
+    const char *value
+    ) {
+  (void) key;
+  (void) value;
+}
+
+
 /*
- ** t_ht_node *ft_lookKey(t_ht *hash_table, char *key)
- ** Look up for a Key at hash_table[hash(Key)]->node->Key
- **
- ** @param hash_table : Hashtable where were lookup for a Key.
- ** @param key   : Key associated to a Value.
- ** @param
- ** @return *t_ht_node : Pointer of associated node to Key.
- ** Case 1 : No collision
- ** if hashtable[hash]->node == NULL
- ** hashtable[hash]->node->key
- **
- ** Case 2 : n Collision
- ** if hashtable[hash]->node != NULL
- ** hashtable[hash]->node->n[ next-> ]key
+ * Look up for a Key at hash_table[hash(Key)]->node->Key
+ *
+ * hash_table : Hashtable where were lookup for a Key.
+ * key   : Key associated to a Value.
+ * return *ht_Bucket : Pointer of associated node to Key.
+ * Case 1 : No collision
+ * if hashtable[hash]->node == NULL
+ * hashtable[hash]->node->key
+ *
+ * Case 2 : n Collision
+ * if hashtable[hash]->node != NULL
+ * hashtable[hash]->node->n[ next-> ]key
  */
 
-t_ht_node *ft_ht_lookkey(t_ht *hash_table, const char *key,
-    size_t len_key, const uint32_t hash) {
-  t_ht_node *node = hash_table->table[hash];
+ht_Bucket *ht_lookup(
+    const ht_Hashtable *hash_table,
+    const char *key,
+    const size_t len_key,
+    const uint32_t hash
+    ) {
+  ht_Bucket *node = hash_table->table[hash];
   while (node != NULL) {
-    if (len_key == node->len_key && !my_strequ(key, node->key)) {
+    if (len_key == node->len_key && !strcmp(key, node->key)) {
       return (node);
     }
     node = node->next;
@@ -59,72 +68,73 @@ t_ht_node *ft_ht_lookkey(t_ht *hash_table, const char *key,
 }
 
 /*
- ** int ft_ht_add_key(t_ht *hash_table, char *key)
- ** @param hash_table : Hashtable where we want to add an entry.
- ** @param value  : Value to stock into hashtable.
- ** @param key   : key to add.
- ** Add a key to the given Hashtable. Check for collision,
- ** if hash collision appear add forward to the concerned node another node.
- ** Collision on node:
- ** new_node->next = hash_table->table[hash];
- ** hash_table->table[hash] = new_node;
+ * hash_table: Hashtable where we want to add an entry.
+ * value: Value to stock into hashtable.
+ * @param key: key to add.
+ * Add a key to the given Hashtable. Check for collision,
+ * if hash collision appear add forward to the concerned node another node.
+ * Collision on node:
+ * new_node->next = hash_table->table[hash];
+ * hash_table->table[hash] = new_node;
  */
 
-int   ft_ht_add_key(t_ht *hash_table, char *value, char *key) {
-  t_ht_node *new_node = malloc(sizeof(t_ht_node));
+int ht_add_key(ht_Hashtable *hash_table, char *value, char *key) {
+  ht_Bucket *new_node = malloc(sizeof(ht_Bucket));
 
-  if (new_node == NULL) {
-    return (-1);
-  }
-
-  size_t len_key = strlen(key);
-  uint32_t hash = ft_murmurhash2(key, len_key, seed) % hash_table->size;
-  t_ht_node *current_node = ft_ht_lookkey(hash_table, key, len_key, hash);
-  if (current_node != NULL) {
-    free(current_node->value);
-    current_node->value = value;
-    current_node->key = key;
-    current_node->len_key = len_key;
-    return (1);
-  }
-  new_node->value = value;
-  new_node->key = key;
-  new_node->len_key = len_key;
-  /* new_node->next = hash_table->table[hash];*/
-  hash_table->table[hash] = new_node;
-  return (0);
-}
-
-/*
- ** void ft_ht_free(t_ht *hash_table)
- ** @param hash_table : Hashtable who need to be free.
- ** Free all of the entry of the hashtable.
- */
-
-void  ft_ht_free(t_ht *hash_table) {
-  if (hash_table == NULL) {
-    return ;
-  }
-  for (size_t i = 0; i < hash_table->size; i++) {
-    t_ht_node *node = hash_table->table[i];
-    while (node != NULL) {
-      t_ht_node *tmp = node;
-      node = node->next;
-      free(tmp->value);
-      free(tmp->key);
-      free(tmp);
+  if (new_node != NULL) {
+    const size_t len_key = strlen(key);
+    const uint32_t hash = murmurhash2(key, len_key,
+                            hash_table->seed) % hash_table->size;
+    ht_Bucket *current_node = ht_lookup(hash_table, key, len_key, hash);
+    if (current_node != NULL) {
+   //   free(current_node->value);
+      ht_Bucket *old_node = current_node;
+      current_node->next = old_node;
+      current_node->value = value;
+      current_node->key = key;
+      current_node->len_key = len_key;
+      return already_in_e;
+    } else {
+      new_node->value = value;
+      new_node->key = key;
+      new_node->len_key = len_key;
+      /* new_node->next = hash_table->table[hash];*/
+      hash_table->table[hash] = new_node;
+      return success_e;
     }
+  } else {
+    return error_e;
   }
-  free(hash_table->table);
-  free(hash_table);
 }
 
 /*
- ** Think about moving the seed into hashtable-seed
+ * Free all of the entry of the hashtable.
  */
-char *ft_ht_get(t_ht *hashtable, const char *key, const size_t len_key) {
-  uint32_t hash = ft_murmurhash2(key, len_key, seed) % hashtable->size;
-  t_ht_node *node = ft_ht_lookkey(hashtable, key, len_key, hash);
+
+void  ht_free(ht_Hashtable *hash_table) {
+  if (hash_table != NULL) {
+    for (size_t i = 0; i < hash_table->size; i++) {
+      ht_Bucket *node = hash_table->table[i];
+      while (node != NULL) {
+        ht_Bucket *tmp = node;
+        node = node->next;
+        free(tmp->value);
+        free(tmp->key);
+        free(tmp);
+      }
+    }
+    free(hash_table->table);
+    free(hash_table);
+  }
+}
+
+char *ht_get(
+    const ht_Hashtable *hashtable,
+    const char *key,
+    const size_t len_key
+    ) {
+  const uint32_t hash = murmurhash2(key, len_key, hashtable->seed) % hashtable->size;
+  ht_Bucket *node = ht_lookup(hashtable, key, len_key, hash);
 
   if (node != NULL) {
     return (node->value);
