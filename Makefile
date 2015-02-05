@@ -6,7 +6,10 @@ SRC = hashtable.c ft_murmurhash.c
 INCDIR = -I./includes -I./my_stdext/includes
 CFLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -std=gnu99
 
-ifeq ($(DEBUG),yes)
+ifeq ($(RELEASE),yes)
+	CC = gcc
+	CFLAGS += -O3
+else
 	CC = clang
 	CFLAGS += -ggdb -g3 -fstack-protector-all -Wshadow -Wunreachable-code \
 			  -Wstack-protector -pedantic-errors -O0 -W -Wundef \
@@ -16,9 +19,6 @@ ifeq ($(DEBUG),yes)
 			  -Wpointer-arith -Wnested-externs -Wstrict-overflow=5 \
 			  -Wno-missing-field-initializers -Wswitch-default -Wswitch-enum \
 			  -Wbad-function-cast -Wredundant-decls -fno-omit-frame-pointer
-else
-	CC = gcc
-	CFLAGS += -O3
 endif
 
 OBJS = $(SRC:.c=.o)
@@ -35,7 +35,7 @@ build_dep:
 
 $(NAME): $(OBJS_PREF)
 	@echo "Linking $@."
-	@ar rcs $@.a $^
+	@ar rcs $@ $^
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@echo "Compiling $@ into $<"
