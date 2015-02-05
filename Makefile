@@ -1,8 +1,8 @@
 NAME = libhashtable.a
 SRCDIR = ./sources
 OBJDIR = ./objs
-LDFLAGS = -lmy_stdext
-SRC = hashtable.c ft_murmurhash.c
+LDFLAGS =
+SRC = hashtable.c murmurhash.c
 INCDIR = -I./includes -I./my_stdext/includes
 CFLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -std=gnu99
 
@@ -25,7 +25,7 @@ OBJS = $(SRC:.c=.o)
 OBJS_PREF = $(addprefix $(OBJDIR)/, $(OBJS))
 LD = $(CC)
 
-all: objdir build_dep $(NAME)
+all: objdir $(NAME)
 
 objdir:
 	@mkdir -p $(OBJDIR)
@@ -34,17 +34,18 @@ build_dep:
 	make re ${ARGS}-C my_stdext
 
 $(NAME): $(OBJS_PREF)
-	@echo "Linking $@."
-	@ar rcs $@ $^
+	echo "Linking $@."
+	ar rcs $@ $^
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@echo "Compiling $@ into $<"
-	@$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
+	echo "Compiling $@ into $<"
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
+
 clean:
-	@rm -f $(OBJS_PREF)
+	rm -f $(OBJS_PREF)
 
 fclean: clean
-	@rm -f $(NAME)
+	rm -f $(NAME)
 
 re: fclean all
 

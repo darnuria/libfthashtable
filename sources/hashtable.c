@@ -1,105 +1,81 @@
-#include <stddef.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "hashtable.h"
-#include "murmurhash.h"
-#include "../my_stdext/includes/my_string.h"
+#include <assert.h>
 
-/*
- * size : Size of the hashtable.
- * ht_Hashtable : Pointer to the fresh hashtable struct.
- * Return a new hashtable with all entry set to NULL,
- * and size set to size.
- */
-
-ht_Hashtable  *ht_new(size_t size, uint32_t seed) {
-  ht_Hashtable *new_table = calloc(1, sizeof(ht_Hashtable));
-  if (new_table) {
-    new_table->table = calloc(size, sizeof(ht_Bucket *));
-    new_table->seed = seed;
-    if (new_table->table == NULL) {
-    free(new_table);
-    return (NULL);
+HT_Hashtable* HT_new_with_capacity(
+    size_t capacity,
+    uint32_t seed,
+    uint32_t(*f_hash)(const char* key, size_t len, uint32_t seed)) {
+  HT_Hashtable *self = malloc(sizeof(HT_Hashtable));
+  if (self != NULL) {
+    self->table = calloc(capacity, sizeof(HT_Bucket*));
+    self->seed = seed;
+    self->capacity = capacity;
+    self->length = 0;
+    self->f_hash = f_hash;
+    if (self->table == NULL) {
+      free(self);
+      return NULL;
     }
   }
-  return (new_table);
+  return self;
 }
+
+// static
+// HT_Bucket *HT_new_node(
+//     const char *key,
+//     const char *value) {
+//   (void) key;
+//   (void) value;
+//   return NULL;
+// }
 
 static
-ht_Bucket *ht_new_node(
+HT_Bucket *HT_lookup_hash(
+    const HT_Hashtable *self,
     const char *key,
-    const char *value
-    ) {
-  (void) key;
-  (void) value;
-}
-
-
-/*
- * Look up for a Key at hash_table[hash(Key)]->node->Key
- *
- * hash_table : Hashtable where were lookup for a Key.
- * key   : Key associated to a Value.
- * return *ht_Bucket : Pointer of associated node to Key.
- * Case 1 : No collision
- * if hashtable[hash]->node == NULL
- * hashtable[hash]->node->key
- *
- * Case 2 : n Collision
- * if hashtable[hash]->node != NULL
- * hashtable[hash]->node->n[ next-> ]key
- */
-
-ht_Bucket *ht_lookup(
-    const ht_Hashtable *hash_table,
-    const char *key,
-    const size_t len_key,
-    const uint32_t hash
-    ) {
-  ht_Bucket *node = hash_table->table[hash];
-  while (node != NULL) {
-    if (len_key == node->len_key && !strcmp(key, node->key)) {
-      return (node);
+    size_t len_key,
+    int32_t hash) {
+  for (HT_Bucket* b = self->table[hash];
+      b != NULL;
+      b = b->next) {
+    if (len_key == b->len_key
+        && !strcmp(key, b->key)) {
+      return b;
     }
-    node = node->next;
   }
-  return (NULL);
+  return NULL;
 }
 
-/*
- * hash_table: Hashtable where we want to add an entry.
- * value: Value to stock into hashtable.
- * @param key: key to add.
- * Add a key to the given Hashtable. Check for collision,
- * if hash collision appear add forward to the concerned node another node.
- * Collision on node:
- * new_node->next = hash_table->table[hash];
- * hash_table->table[hash] = new_node;
- */
+HT_Bucket *HT_lookup(
+    const HT_Hashtable *table,
+    const char *key,
+    size_t len_key) {
+  const int32_t hash = table->f_hash(key, len_key, table->seed) % table->capacity;
+  return HT_lookup_hash(table, key, len_key, hash);
+}
 
-int ht_add_key(ht_Hashtable *hash_table, char *value, char *key) {
-  ht_Bucket *new_node = malloc(sizeof(ht_Bucket));
+// TODO: REFACTOR THIS.
+HT_result HT_add_key(HT_Hashtable *self, char* value, char* key) {
+  HT_Bucket *b = malloc(sizeof(HT_Bucket));
+  // HT_Bucket *b = SL_new_bucket(value, key);
 
-  if (new_node != NULL) {
+  if (b != NULL) {
     const size_t len_key = strlen(key);
-    const uint32_t hash = murmurhash2(key, len_key,
-                            hash_table->seed) % hash_table->size;
-    ht_Bucket *current_node = ht_lookup(hash_table, key, len_key, hash);
-    if (current_node != NULL) {
-   //   free(current_node->value);
-      ht_Bucket *old_node = current_node;
-      current_node->next = old_node;
-      current_node->value = value;
-      current_node->key = key;
-      current_node->len_key = len_key;
+    const uint32_t hash = self->f_hash(key, len_key, self->seed) % self->capacity;
+    // Need refactoring.
+    b->len_key = len_key;
+    b->key = key;
+    b->value = value;
+    self->length += 1;
+    // Need refactoring.
+    HT_Bucket *current = HT_lookup_hash(self, key, len_key, hash);
+    if (current != NULL) {
+      // SL_preppend(b);
+      perror("Not implemented.");
+      assert(false);
       return already_in_e;
     } else {
-      new_node->value = value;
-      new_node->key = key;
-      new_node->len_key = len_key;
-      /* new_node->next = hash_table->table[hash];*/
-      hash_table->table[hash] = new_node;
+      current = b;
       return success_e;
     }
   } else {
@@ -107,38 +83,39 @@ int ht_add_key(ht_Hashtable *hash_table, char *value, char *key) {
   }
 }
 
-/*
- * Free all of the entry of the hashtable.
- */
-
-void  ht_free(ht_Hashtable *hash_table) {
-  if (hash_table != NULL) {
-    for (size_t i = 0; i < hash_table->size; i++) {
-      ht_Bucket *node = hash_table->table[i];
-      while (node != NULL) {
-        ht_Bucket *tmp = node;
-        node = node->next;
+void HT_free(HT_Hashtable *self) {
+  if (self != NULL) {
+    for (size_t i = 0; i < self->capacity; i += 1) {
+      HT_Bucket *iter = self->table[i];
+      while (iter != NULL) {
+        HT_Bucket *tmp = iter;
+        iter = iter->next;
         free(tmp->value);
         free(tmp->key);
         free(tmp);
       }
     }
-    free(hash_table->table);
-    free(hash_table);
+    free(self->table);
+    free(self);
   }
 }
 
-char *ht_get(
-    const ht_Hashtable *hashtable,
-    const char *key,
-    const size_t len_key
-    ) {
-  const uint32_t hash = murmurhash2(key, len_key, hashtable->seed) % hashtable->size;
-  ht_Bucket *node = ht_lookup(hashtable, key, len_key, hash);
+void *HT_get(const HT_Hashtable *self, const char *key) {
+  return HT_get_with_len(self, key, strlen(key));
+}
 
+void* HT_get_with_len(
+    const HT_Hashtable *self,
+    const char *key,
+    size_t len_key) {
+  HT_Bucket *node = HT_lookup(self, key, len_key);
   if (node != NULL) {
     return (node->value);
   } else {
     return (NULL);
   }
 }
+
+size_t HT_length(HT_Hashtable* self) { return self->length; }
+size_t HT_capacity(HT_Hashtable* self) { return self->capacity; }
+uint32_t HT_seed(HT_Hashtable* self) { return self->seed; }

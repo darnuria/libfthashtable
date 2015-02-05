@@ -17,6 +17,6 @@
  * They're not really 'magic', they just happen to work well.
  */
 
-uint32_t murmurhash2(const char* key, int len, const uint32_t seed);
+uint32_t murmurhash2(const char* key, size_t len, uint32_t seed);
 
 #endif // MURMURHASH2_H
