@@ -55,7 +55,7 @@ HT_Bucket *HT_lookup(
 }
 
 // TODO: REFACTOR THIS.
-HT_result HT_add_key(HT_Hashtable *self, char* value, char* key) {
+HT_result HT_set(HT_Hashtable *self, void* value, char* key) {
   HT_Bucket *b = malloc(sizeof(HT_Bucket));
   // HT_Bucket *b = SL_new_bucket(value, key);
 
@@ -116,6 +116,6 @@ void* HT_get_with_len(
   }
 }
 
-size_t HT_length(HT_Hashtable* self) { return self->length; }
-size_t HT_capacity(HT_Hashtable* self) { return self->capacity; }
-uint32_t HT_seed(HT_Hashtable* self) { return self->seed; }
+size_t HT_length(const HT_Hashtable* self) { return self->length; }
+size_t HT_capacity(const HT_Hashtable* self) { return self->capacity; }
+uint32_t HT_seed(const HT_Hashtable* self) { return self->seed; }
